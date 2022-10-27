@@ -26,7 +26,8 @@ export TRACER_TOOL=/home/jueonpark/cxl-simulator/multi_gpu_simulator/util/tracer
 export POST_PROCESSING=/home/jueonpark/cxl-simulator/multi_gpu_simulator/util/tracer_nvbit/tracer_tool/traces-processing/post-traces-processing
 
 # caution!
-export DYNAMIC_KERNEL_LIMIT_START=999998
+# 1803
+export DYNAMIC_KERNEL_LIMIT_START=1803
 export DYNAMIC_KERNEL_LIMIT_END=999999
 
 # additional runtime environment variables for tensorflow
