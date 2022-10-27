@@ -8,23 +8,20 @@ from src.model import DLRMModel
 
 BATCH=512
 
-# data preparation
+### DATASET ###
+# Load Adult data set to predict the income over 50k
 data = pd.read_csv('./data/adult.csv')
 
+# Set the numercal features and categorical features
 all_columns = data.columns
-
 num_cols = ['fnlwgt', 'capital-gain', 'capital-loss', 'hours-per-week']
 cat_cols = list(set(all_columns)-set(num_cols))
 target_cols = ['income']
 
-num_data = data[num_cols]
-cat_data = data[cat_cols]
-target = data[target_cols]
-
-print(num_data[:BATCH])
-print(cat_data[:BATCH])
-print(target[:BATCH])
-
+# Set Data
+num_data = data[num_cols][:BATCH]
+cat_data = data[cat_cols][:BATCH]
+target = data[target_cols][:BATCH]
 target[target_cols] = (target[target_cols]=='>50K').astype(int)
 
 scaler = MinMaxScaler()
@@ -35,6 +32,8 @@ lbenc.fit(cat_data, cat_data.columns)
 
 cat_enc = lbenc.transform(cat_data)
 
+### MODEL ###
+# Prepare training datasets
 y = target[target_cols].values
 X = [num_data.values]
 
@@ -48,9 +47,7 @@ feature_dic = {}
 for col in cat_enc:
     feature_dic[col] = cat_enc[col].nunique()
 
-# generate model
+# Fitting model
 dlrm = DLRMModel(num_data, cat_enc, feature_dic)
-# compile model
 dlrm.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-# train
 dlrm.fit(X, y, epochs=1, steps_per_epoch=1)
